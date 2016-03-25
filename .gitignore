@@ -1,0 +1,10 @@
+node_modules*
+*.db
+config.json
+*.nsproj
+*.sln
+*bower_components*
+users.json
+.ntvs_analysis.dat
+*.njsproj
+obj/
