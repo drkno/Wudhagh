@@ -1,6 +1,6 @@
 var config;
 try {
-  config = require('config.json');
+  config = require('./config.json');
 }
 catch(e) {
   config = {};

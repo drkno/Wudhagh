@@ -1,76 +1,47 @@
-var Serve = require('./serve.js'),
-	ListManager = require('./list.js');
+var Server = require('./server/serve.js'),
+    ListManager = require('./list.js'),
+    UserManager = require('./users/users.js');
+
+var setupServer = function(config) {
+    var userManager = new UserManager(config.usersFile, config.passwordAlgorithm);
+    return new Server(config.port, config.htmlRoot, userManager, config.authentication);
+};
 
 exports.run = function(config) {
-	var server = new Serve(config.port),
-		manager = new ListManager(config.datastore);
+    var server = setupServer(config),
+        manager = new ListManager(config.datastore);
 
-	server.apiGet('new', function (req, res) {
-		manager.newList();
-		res.send('{"complete":true}');
-	});
-
-	server.apiGet('current', function (req, res) {
-		try {
-			manager.current(function(obj) {
-				res.send(obj);
-			});
-		}
-		catch(e) {
-			console.log(e.stack);
-			res.status(400).send('{"complete":false}');
-		}
-	});
-
-	server.apiPost('addItem', function (req, res) {
-		res.contentType("application/json");
-		try {
-			var json = req.body;
-			manager.addItem(json.newItem);
-			res.send('{"complete":true}');
-
-		}
-		catch(e) {
-			console.log(e.stack);
-			res.status(400).send('{"complete":false}');
-		}
-	});
-
-	server.apiPost('removeItem', function (req, res) {
-		try {
-			var json = req.body;
-			manager.removeItem(json.removeItem);
-			res.send('{"complete":true}');
-		}
-		catch(e) {
-			console.log(e.stack);
-			res.status(400).send('{"complete":false}');
-		}
+    server.apiGet('new', function () {
+        manager.newList();
+        return true;
     });
 
-    server.apiPost('updateItem', function(req, res) {
-        try {
-            var json = req.body;
-            manager.replaceItem(json.oldItem, json.newItem);
-            res.send('{"complete":true}');
-        }
-		catch (e) {
-            console.log(e.stack);
-            res.status(400).send('{"complete":false}');
-        }
+	server.apiGet('current', function (req, res) {
+	    manager.current(function(obj) {
+		    res.send(obj);
+	    });
+	});
+
+	server.apiPost('addItem', function (req) {
+		manager.addItem(req.body.newItem);
+        return true;
+	});
+
+	server.apiPost('removeItem', function (req) {
+		manager.removeItem(req.body.removeItem);
+        return true;
+    });
+
+    server.apiPost('updateItem', function(req) {
+        manager.replaceItem(req.body.oldItem, req.body.newItem);
+        return true;
     });
 
     server.apiGet('itemsList', function(req, res) {
-        try {
-            manager.getItems(function (obj) {
-                res.send({ items: obj });
-            });
-        }
-		catch (e) {
-            console.log(e.stack);
-            res.status(400).send('{"complete":false}');
-        }
+        manager.getItems(function (obj) {
+            res.send({ items: obj });
+        });
     });
 
-	server.start(config.port);
+	server.start();
 };

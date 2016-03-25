@@ -1,4 +1,4 @@
-﻿var appController = angular.module('appController', ['ui.bootstrap', 'AngularPrint']);
+﻿var appController = angular.module('appController', ['ui.bootstrap']);
 
 appController.controller('MainController', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
 
