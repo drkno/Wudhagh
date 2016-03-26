@@ -1,13 +1,24 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="refresh" content="0;url=pages/index.html">
-<title>SB Admin 2</title>
-<script language="javascript">
-    window.location.href = "pages/index.html"
-</script>
-</head>
-<body>
-Go to <a href="pages/index.html">/pages/index.html</a>
-</body>
+<html lang="en" data-ng-app="Wudhagh">
+    <head>
+        <title>Wudhagh</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="css/main.css" rel="stylesheet">
+        <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/angular/angular.min.js"></script>
+        <script src="bower_components/angular-route/angular-route.min.js"></script>
+        <script src="bower_components/angular-touch/angular-touch.js"></script>
+        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/templateController.js"></script>
+        <script src="js/shoppingListController.js"></script>
+        <base href="/">
+    </head>
+    <body>
+        <div data-ng-include data-src="'pages/template.html'"></div>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    </body>
 </html>
