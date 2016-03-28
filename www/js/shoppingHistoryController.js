@@ -60,11 +60,11 @@ module.controller('ShoppingHistoryController', [
                 }
                 $scope.itemsPie.toggleLegend(false);
                     
-                // Construct Top 10
+                // Construct Top 15
                 $scope.top.top = $filter('limitTo')(response.data.items, $scope.top.showNum);
-                $scope.top.total = response.data.total;
+                $scope.top.total = response.data.items.length;
                     
-                // Construct Last 10
+                // Construct Last 15
                 $scope.bottom.start = response.data.items.length - $scope.bottom.showNum - 1;
                 $scope.bottom.bottom = $filter('limitTo')(response.data.items, $scope.bottom.showNum, $scope.bottom.start);
             },

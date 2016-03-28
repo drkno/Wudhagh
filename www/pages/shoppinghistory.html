@@ -69,7 +69,7 @@
     <div class="col-lg-6 col-md-6">
         <div class="panel panel-danger">
             <div class="panel-heading">
-                <h4>Most Obscure {{bottom.bottom.length}} of {{top.total}} item{{top.total==1?'':'s'}}</h4>
+                <h4>Most obscure {{bottom.bottom.length}} of {{top.total}} item{{top.total==1?'':'s'}}</h4>
                 <div class="row" style="padding-left: 10px; padding-right: 10px">
                     <table class="table table-hover">
                         <thead>
@@ -81,7 +81,7 @@
                         </thead>
                         <tbody>
                             <tr data-ng-repeat="item in bottom.bottom">
-                                <td>{{bottomTen.start+$index+1}}</td>
+                                <td>{{bottom.start+2+$index}}</td>
                                 <td>{{item[0]}}</td>
                                 <td>{{item[1]}}</td>
                             </tr>
