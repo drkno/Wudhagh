@@ -39,6 +39,6 @@ exports.basicUsers = function(userManager, ignoredAuthConfig) {
         if (userManager.validateUser(user.name, user.pass)) {
             return next();
         }
-        return unauthorized();
+        return unauthorized(res);
     };
 };

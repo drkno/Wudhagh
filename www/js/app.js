@@ -2,6 +2,7 @@
     'ngRoute',
     'ui.bootstrap',
     'ngTouch',
+    'chart.js',
     'wudhaghControllers'
 ]),
 
@@ -11,6 +12,12 @@ routes = [
         templateUrl: 'pages/shoppinglist.html',
         controller: 'ShoppingListController',
         name: 'Shopping List'
+    },
+    {
+        path: '/shoppinghistory',
+        templateUrl: 'pages/shoppinghistory.html',
+        controller: 'ShoppingHistoryController',
+        name: 'Shopping History'
     }
 ],
 
@@ -29,4 +36,4 @@ Wudhagh.config(['$routeProvider', '$locationProvider', function ($routeProvider,
 //    $locationProvider.html5Mode(true);
 }]);
 
-var wudhaghControllers = angular.module('wudhaghControllers', ['ui.bootstrap', 'ngTouch']);
+var wudhaghControllers = angular.module('wudhaghControllers', ['ui.bootstrap', 'ngTouch', 'chart.js']);

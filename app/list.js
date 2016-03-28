@@ -30,16 +30,18 @@ Manager.prototype.addItem = function (item) {
 Manager.prototype.replaceItem = function(oldItem, newItem) {
     var id = this.currId;
     this.store.update({ _id: id }, { $pull: { items: oldItem }, $push: { items: newItem } }, {}, function (err, obj) {
-        console.log(err);
-        console.log(obj);
+        if (err) {
+            throw err;
+        }
     });
 };
 
 Manager.prototype.removeItem = function (item) {
 	var id = this.currId;
 	this.store.update({_id: id}, {$pull: {items: item}}, {}, function(err, obj){
-		console.log(err);
-		console.log(obj);
+		if (err) {
+		    throw err;
+        }
 	});
 };
 
@@ -70,9 +72,13 @@ Manager.prototype.getItems = function(callback) {
         }
         
         // get all items
+        var tota = 0;
+        var tots = [];
         var coll = [];
         for (var i = 0; i < res.length; i++) {
             coll = coll.concat(res[i].items);
+            tots.push(res[i].items.length);
+            tota += res[i].items.length;
         }
         
         // to title case and unique
@@ -82,21 +88,27 @@ Manager.prototype.getItems = function(callback) {
             var key = coll[j].name.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
             if (!temp[key]) {
                 temp[key] = 1;
-                result.push(key);
             } else {
                 temp[key]++;
             }
         }
+        for (var i in temp) {
+            result.push([i, temp[i]]);
+        }
         
         // sort by frequency and alphabet
         result = result.sort(function(a, b) {
-            var res = temp[a] - temp[b];
+            var res = b[1] - a[1];
             if (res !== 0) return res;
-            if (a > b) return 1;
-            if (a < b) return -1;
+            if (a[0] > b[0]) return 1;
+            if (a[0] < b[0]) return -1;
             return 0;
         });
 
-        callback(result);
+        callback({
+            items: result,
+            total: tota,
+            shops: tots
+        });
     });
 };

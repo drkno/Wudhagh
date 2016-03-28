@@ -39,7 +39,7 @@ exports.run = function(config) {
 
     server.apiGet('itemsList', function(req, res) {
         manager.getItems(function (obj) {
-            res.send({ items: obj });
+            res.send(obj);
         });
     });
 

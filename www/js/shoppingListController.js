@@ -36,10 +36,7 @@ module.controller('ShoppingListController', ['$scope', '$http', '$filter', funct
                 });
                 $scope.numDays = $scope.getDays();
             },
-        function (response) {
-                console.log(response);
-                console.log(response.success);
-            });
+            function () {});
         };
         
         $scope.setContext = function (index) {
@@ -80,14 +77,8 @@ module.controller('ShoppingListController', ['$scope', '$http', '$filter', funct
                 url: '/api/removeItem',
                 data: item
             })
-        .then(function (response) {
-                console.log(response);
-                console.log(response.success);
-            },
-        function (response) {
-                console.log(response);
-                console.log(response.success);
-            });
+            .then(function () {},
+            function () {});
             $scope.resetContext();
         };
         
@@ -100,12 +91,9 @@ module.controller('ShoppingListController', ['$scope', '$http', '$filter', funct
                     newItem: $scope.contextItem
                 }
             })
-        .then(function () {
+            .then(function () {
                 $scope.resetContext();
-            }, function () {
-                console.log(response);
-                console.log(response.success);
-            });
+            }, function () {});
         };
         
         $scope.saveItem = function () {
@@ -142,12 +130,9 @@ module.controller('ShoppingListController', ['$scope', '$http', '$filter', funct
                 url: '/api/addItem',
                 data: { newItem: $scope.contextItem }
             })
-        .then(function () {
+            .then(function () {
                 $scope.resetContext();
-            }, function () {
-                console.log(response);
-                console.log(response.success);
-            });
+            }, function () {});
         };
         
         $scope.newList = function () {
@@ -155,13 +140,10 @@ module.controller('ShoppingListController', ['$scope', '$http', '$filter', funct
                 method: 'GET',
                 url: '/api/new'
             })
-        .then(function () {
+            .then(function () {
                 $scope.getCurrent();
             },
-        function (response) {
-                console.log(response);
-                console.log(response.success);
-            });
+            function () {});
         };
         
         $scope.getUnit = function (item) {
@@ -197,13 +179,13 @@ module.controller('ShoppingListController', ['$scope', '$http', '$filter', funct
                     method: 'GET',
                     url: '/api/itemsList'
                 })
-            .then(function (response) {
-                    $scope.suggestions = response.data.items;
-                    return $filter('limitTo')($filter('filter')(response.data.items, val), 8);
+                .then(function (response) {
+                    $scope.suggestions = response.data.items.map(function(item) {
+                        return item[0];
+                    });
+                    return $filter('limitTo')($filter('filter')($scope.suggestions, val), 8);
                 },
-            function (response) {
-                    console.log(response);
-                    console.log(response.success);
+                function () {
                     return [];
                 });
             } else {
