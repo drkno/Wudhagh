@@ -10,7 +10,7 @@
             <a class="navbar-brand" style="cursor: default; user-select: none">Wudhagh</a>
         </div>
         <div class="navbar-default sidebar" role="navigation">
-            <div class="sidebar-nav navbar-collapse">
+            <div class="sidebar-nav navbar-collapse collapse">
                 <ul class="nav" id="side-menu">
                     <li data-ng-repeat="route in getRoutes()">
                         <a style="outline: none" data-ng-href="/#{{route.path}}" data-ng-class="{active:current(route.path)}"><i class="fa fa-dashboard fa-fw"></i> {{route.name}}</a>
