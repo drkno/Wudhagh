@@ -8,3 +8,4 @@ users.json
 .ntvs_analysis.dat
 *.njsproj
 obj/
+nohup.out
