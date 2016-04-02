@@ -12,7 +12,7 @@ exports.dir = function (htmlRoot) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
-		var p = url.parse(req.url).url;
+		var p = url.parse(req.url).path;
         if (p.indexOf("/api") < 0) {
             if (p === "/") {
                 p = "/index.html";
