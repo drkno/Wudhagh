@@ -1,6 +1,7 @@
 ﻿var fs = require('fs'),
     path = require('path'),
-    mime = require('mime');
+    mime = require('mime'),
+	url = require('url');
 
 exports.dir = function (htmlRoot) {
     return function(req, res, next) {
@@ -11,12 +12,13 @@ exports.dir = function (htmlRoot) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
-        if (req.url.indexOf("/api") !== 0) {
-            if (req.url === "/") {
-                req.url = "/index.html";
+		var p = url.parse(req.url).url;
+        if (p.indexOf("/api") < 0) {
+            if (p === "/") {
+                p = "/index.html";
             }
 
-            var file = path.join(htmlRoot, req.url);
+            var file = path.join(htmlRoot, p);
             file = path.resolve(file);
 
             if (!file.startsWith(htmlRoot)) {
