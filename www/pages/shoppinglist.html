@@ -141,18 +141,18 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr data-ng-repeat="item in items" data-ng-swipe-left="swipeLeft($index)" data-ng-swipe-right="swipeRight($index)" data-ng-class="{success:item.purchased}">
+                                <tr data-ng-repeat="item in items" data-ng-swipe-left="swipeLeft(item)" data-ng-swipe-right="swipeRight(item)" data-ng-class="{success:item.purchased}" class="uneditable">
                                     <td class="visible-lg">{{$index+1}}</td>
                                     <td style="white-space: normal">{{item.name}}</td>
                                     <td class="visible-lg">{{dtToString(item.added)}}</td>
                                     <td style="white-space: normal">
                                         {{item.quantity}} {{getUnit(item)}}
                                         <span class="pull-right">
-                                            <button class="btn btn-warning btn-xs print-remove" data-toggle="modal" data-target="#editModal" data-ng-click="setContext($index)">
+                                            <button class="btn btn-warning btn-xs print-remove" data-toggle="modal" data-target="#editModal" data-ng-click="setContext(item)">
                                                 <i class="glyphicon glyphicon-edit"></i>
                                                 <span class="hidden-sm hidden-xs">Edit Item</span>
                                             </button>
-                                            <button class="btn btn-danger btn-xs print-remove" data-toggle="modal" data-target="#deleteModal" data-ng-click="setContext($index)">
+                                            <button class="btn btn-danger btn-xs print-remove" data-toggle="modal" data-target="#deleteModal" data-ng-click="setContext(item)">
                                                 <i class="glyphicon glyphicon-trash"></i>
                                                 <span class="hidden-sm hidden-xs">Delete Item</span>
                                             </button>

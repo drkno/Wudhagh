@@ -1,10 +1,16 @@
-﻿var fs = require('fs'),
+﻿let fs = require('fs'),
     path = require('path'),
     mime = require('mime'),
 	url = require('url');
 
-exports.dir = function (htmlRoot) {
-    return function(req, res, next) {
+exports.dir = (htmlRoot) => {
+    for (let key in htmlRoot) {
+        if (htmlRoot.hasOwnProperty(key)) {
+            htmlRoot[key] = path.resolve(path.join(__dirname, htmlRoot[key]));
+        }
+    }
+
+    return (req, res, next) => {
         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
         res.header('Expires', '-1');
         res.header('Pragma', 'no-cache');
@@ -12,25 +18,35 @@ exports.dir = function (htmlRoot) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
-		var p = url.parse(req.url).path;
+		let p = url.parse(req.url).path;
         if (p.indexOf("/api") < 0) {
             if (p === "/") {
                 p = "/index.html";
             }
 
-            var file = path.join(htmlRoot, p);
-            file = path.resolve(file);
+            let found = false,
+                file = null;
+            for (let key in htmlRoot) {
+                if (htmlRoot.hasOwnProperty(key) && p.startsWith(key)) {
+                    file = path.join(htmlRoot[key], p.substring(key.length));
+                    file = path.resolve(file);
+                    if (file.startsWith(htmlRoot[key])) {
+                        found = true;
+                    }
+                    break;
+                }
+            }
 
-            if (!file.startsWith(htmlRoot)) {
+            if (!found) {
                 res.contentType("application/json");
                 res.status(400).send('{"complete":false, "message":"bad request"}');
                 return;
             }
 
-            var type = mime.lookup(file);
+            let type = mime.lookup(file);
             fs.readFile(file, function(err, data) {
                 if (err) {
-                    fs.readFile(path.join(htmlRoot, '404.html'), function(err, data) {
+                    fs.readFile(path.join(htmlRoot[''], '404.html'), function(err, data) {
                         if (err) {
                             res.contentType("application/json");
                             res.status(404).send('{"complete":false, "message":"file not found"}');

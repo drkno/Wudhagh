@@ -1,6 +1,11 @@
-var basicAuth = require('basic-auth');
+let basicAuth = require('basic-auth'),
 
-exports.basicUsers = function(userManager, ignoredAuthConfig) {
+unauthorised = (res) => {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.sendStatus(401);
+};
+
+exports.basicUsers = (userManager, ignoredAuthConfig) => {
     if (!ignoredAuthConfig) {
         ignoredAuthConfig = {
             ignoredRanges: ['127.0.0.', '192.168.'],
@@ -9,36 +14,35 @@ exports.basicUsers = function(userManager, ignoredAuthConfig) {
     }
 
     return function(req, res, next) {
-        var ip = req.ip;
+        let ip = req.ip;
         if (ip.includes(':')) {
             ip = ip.substring(ip.lastIndexOf(':') + 1);
             if (ip === "1") {
-                ip = "127.0.0.1";
+                ip = '127.0.0.1';
             }
         }
         
-        for (var i in ignoredAuthConfig.ignoredRanges) {
-            if (ip.startsWith(ignoredAuthConfig.ignoredRanges[i])) return next();
+        for (let range of ignoredAuthConfig.ignoredRanges) {
+            if (ip.startsWith(range)) {
+                return next();
+            }
+        }
+        
+        for (let ipath of ignoredAuthConfig.ignoredPaths) {
+            if (req.url.startsWith(ipath)) {
+                return next();
+            }
         }
 
-        for (var i in ignoredAuthConfig.ignoredPaths) {
-            if (req.url.startsWith(ignoredAuthConfig.ignoredPaths[i])) return next();
-        }
-
-        function unauthorized(res) {
-            res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-            return res.sendStatus(401);
-        };
-
-        var user = basicAuth(req);
+        let user = basicAuth(req);
 
         if (!user || !user.name || !user.pass) {
-            return unauthorized(res);
+            return unauthorised(res);
         };
 
         if (userManager.validateUser(user.name, user.pass)) {
             return next();
         }
-        return unauthorized(res);
+        return unauthorised(res);
     };
 };

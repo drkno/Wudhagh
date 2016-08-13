@@ -1,46 +1,53 @@
 var Server = require('./server/serve.js'),
     ListManager = require('./list.js'),
-    UserManager = require('./users/users.js');
+    UserManager = require('./users/users.js'),
+    extend = require('util')._extend;
 
 var setupServer = function(config) {
     var userManager = new UserManager(config.usersFile, config.passwordAlgorithm);
-    return new Server(config.port, config.htmlRoot, userManager, config.authentication);
+    var eventsRoot = config.eventsRoot ? config.eventsRoot : '/wudhagh-ws-events';
+    return new Server(config.port, config.htmlRoot, eventsRoot, userManager, config.authentication);
 };
 
 exports.run = function(config) {
     var server = setupServer(config),
         manager = new ListManager(config.datastore);
 
-    server.apiGet('new', function () {
+    server.on('connection', function (socket) {
+        manager.current(function (obj) {
+            socket.emit('current', obj);
+        });
+    });
+    
+    server.on('new', function (socket) {
         manager.newList();
-        return true;
+        socket.broadcast.emit('new');
     });
 
-	server.apiGet('current', function (req, res) {
-	    manager.current(function(obj) {
-		    res.send(obj);
-	    });
-	});
-
-	server.apiPost('addItem', function (req) {
-		manager.addItem(req.body.newItem);
-        return true;
-	});
-
-	server.apiPost('removeItem', function (req) {
-		manager.removeItem(req.body.removeItem);
-        return true;
+    server.on('add', function(socket, data) {
+        manager.addItem(data);
+        socket.broadcast.emit('add', data);
     });
-
-    server.apiPost('updateItem', function(req) {
-        manager.replaceItem(req.body.oldItem, req.body.newItem);
-        return true;
+    
+    server.on('remove', function(socket, data) {
+        manager.removeItem(data);
+        socket.broadcast.emit('remove', data);
     });
-
-    server.apiGet('itemsList', function(req, res) {
+    
+    server.on('update', function(socket, data) {
+        manager.replaceItem(data.oldName, data.item);
+        socket.broadcast.emit('update', data);
+    });
+    
+    server.apiGet('suggestions', function(req, res) {
         manager.getItems(function (obj) {
             res.send(obj);
         });
+    });
+    
+    server.on('swipe', function (socket, data) {
+        manager.updateFields(data.name, { purchased: data.purchased });
+        socket.broadcast.emit('swipe', data);
     });
 
 	server.start();

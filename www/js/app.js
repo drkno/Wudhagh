@@ -3,6 +3,7 @@
     'ui.bootstrap',
     'ngTouch',
     'chart.js',
+    'btford.socket-io',
     'wudhaghControllers'
 ]),
 
@@ -36,4 +37,12 @@ Wudhagh.config(['$routeProvider', '$locationProvider', function ($routeProvider,
 //    $locationProvider.html5Mode(true);
 }]);
 
-var wudhaghControllers = angular.module('wudhaghControllers', ['ui.bootstrap', 'ngTouch', 'chart.js']);
+var wudhaghControllers = angular.module('wudhaghControllers', ['ui.bootstrap', 'ngTouch', 'chart.js', 'btford.socket-io']);
+
+wudhaghControllers.factory('socket', function (socketFactory) {
+    var wudhaghIoSocket = io.connect('/', { path: '/wudhagh-ws-events' });
+    var wudhaghSocket = socketFactory({
+        ioSocket: wudhaghIoSocket
+    });
+    return wudhaghSocket;
+});
