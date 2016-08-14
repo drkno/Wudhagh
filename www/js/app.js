@@ -46,3 +46,7 @@ wudhaghControllers.factory('socket', function (socketFactory) {
     });
     return wudhaghSocket;
 });
+
+Wudhagh.run(['$route', function($route) {
+    $route.reload();
+}]);
