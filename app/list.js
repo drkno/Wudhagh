@@ -1,3 +1,5 @@
+'use strict';
+
 let Datastore = require('nedb'),
     path = require('path'),
     fs = require('fs');

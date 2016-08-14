@@ -1,3 +1,5 @@
+'use strict';
+
 let basicAuth = require('basic-auth'),
 
 unauthorised = (res) => {

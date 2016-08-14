@@ -1,3 +1,5 @@
+'use strict';
+
 ﻿let fs = require('fs'),
     path = require('path'),
     mime = require('mime'),
