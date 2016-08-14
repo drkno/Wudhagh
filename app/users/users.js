@@ -1,3 +1,5 @@
+'use strict';
+
 ﻿module.exports = class {
     constructor (usersFile, alg) {
         if (!usersFile) {

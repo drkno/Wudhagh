@@ -1,3 +1,5 @@
+'use strict';
+
 let Server = require('./server/serve.js'),
     ListManager = require('./list.js'),
     UserManager = require('./users/users.js');
