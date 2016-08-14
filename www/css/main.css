@@ -361,5 +361,21 @@ table.dataTable thead .sorting:after {
     -moz-user-select: none;
     -ms-user-select: none;
     text-decoration: none;
-    cursor: pointer;
+    cursor: default;
 }
+
+.scroll-container {
+    overflow-y: auto;
+    max-height: 615px;
+    overflow-x: hidden;
+}
+
+
+
+
+
+
+
+
+
+

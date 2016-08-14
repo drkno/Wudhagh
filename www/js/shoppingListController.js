@@ -1,5 +1,5 @@
-﻿let controllers = angular.module('wudhaghControllers');
-controllers.controller('ShoppingListController', ['$scope', '$http', '$filter', 'socket', function ($scope, $http, $filter, socket) {
+﻿wudhaghControllers.controller('ShoppingListController', ['$scope', '$http', '$filter', 'socket',
+    function ($scope, $http, $filter, socket) {
 
         //#region data context
 
@@ -9,16 +9,11 @@ controllers.controller('ShoppingListController', ['$scope', '$http', '$filter', 
         $scope.suggestions = null;
         let currName = null;
 
-        $scope.setContext = function (item) {
+        $scope.setContext = (item) => {
             currName = item.name;
             $scope.contextItem = angular.copy(item);
         };
-
-        //#endregion data context
-
-
-
-
+        
         let resetSelectionContext = () => {
             $scope.contextItem = {
                 name: "",
@@ -30,7 +25,7 @@ controllers.controller('ShoppingListController', ['$scope', '$http', '$filter', 
             $scope.suggestions = null;
             currName = null;
         };
-
+        
         let getDays = () => {
             var currMin = new Date();
             for (var i = 0; i < $scope.items.length; i++) {
@@ -40,9 +35,9 @@ controllers.controller('ShoppingListController', ['$scope', '$http', '$filter', 
             }
             return Math.round(Math.abs(((new Date()).getTime() - currMin.getTime()) / (86400000)));
         };
-
+        
         let setOrder = () => {
-            $scope.items.sort(function (a, b) {
+            $scope.items.sort((a, b) => {
                 if (a.name > b.name) return 1;
                 if (a.name === b.name) return 0;
                 return -1;
@@ -50,18 +45,11 @@ controllers.controller('ShoppingListController', ['$scope', '$http', '$filter', 
             $scope.numDays = getDays();
         };
 
-
-
-
-
-
-
-
-
+        //#endregion data context
 
         //#region current
 
-        socket.on('current', function (data) {
+        socket.on('current', (data) => {
             $scope.items = data.items;
             resetSelectionContext();
             setOrder();
@@ -77,11 +65,11 @@ controllers.controller('ShoppingListController', ['$scope', '$http', '$filter', 
             setOrder();
         };
 
-        socket.on('new', function () {
+        socket.on('new', () => {
             newList();
         });
 
-        $scope.newList = function () {
+        $scope.newList = () => {
             newList();
             socket.emit('new');
         };
@@ -95,7 +83,7 @@ controllers.controller('ShoppingListController', ['$scope', '$http', '$filter', 
             setOrder();
         };
 
-        socket.on('add', function (data) {
+        socket.on('add', (data) => {
             addItem(data);
         });
 
@@ -280,8 +268,12 @@ controllers.controller('ShoppingListController', ['$scope', '$http', '$filter', 
             popupWin.document.close();
         };
 
-        //#endregion
-
+        $scope.getPurchaserString = () => {
+            if (!purchaser) {
+                return 'Loading...';
+            }
+            return purchaser.charAt(0).toUpperCase() + purchaser.substr(1).toLowerCase() + '\'s Purchase';
+        };
 
         $scope.saveItem = () => {
             if (!$scope.contextItem.name || $scope.contextItem.name.trim().length === 0 || !$scope.contextItem.quantity) {
@@ -290,11 +282,11 @@ controllers.controller('ShoppingListController', ['$scope', '$http', '$filter', 
                 return;
             }
 
-            $scope.contextItem.name = $scope.contextItem.name.replace(/\w\S*/g, function(txt) {
+            $scope.contextItem.name = $scope.contextItem.name.replace(/\w\S*/g, (txt) => {
                 return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
             }).trim();
 
-            var filtered = $scope.items.filter(function (obj) {
+            var filtered = $scope.items.filter((obj) => {
                 return obj.name === $scope.contextItem.name;
             });
 
@@ -318,4 +310,6 @@ controllers.controller('ShoppingListController', ['$scope', '$http', '$filter', 
             resetSelectionContext();
         };
 
+
+        //#endregion
     }]);

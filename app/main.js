@@ -1,11 +1,10 @@
-var Server = require('./server/serve.js'),
+let Server = require('./server/serve.js'),
     ListManager = require('./list.js'),
-    UserManager = require('./users/users.js'),
-    extend = require('util')._extend;
+    UserManager = require('./users/users.js');
 
-var setupServer = function(config) {
-    var userManager = new UserManager(config.usersFile, config.passwordAlgorithm);
-    var eventsRoot = config.eventsRoot ? config.eventsRoot : '/wudhagh-ws-events';
+let setupServer = function(config) {
+    let userManager = new UserManager(config.usersFile, config.passwordAlgorithm),
+        eventsRoot = config.eventsRoot ? config.eventsRoot : '/wudhagh-ws-events';
     return new Server(config.port, config.htmlRoot, eventsRoot, userManager, config.authentication);
 };
 
@@ -15,6 +14,9 @@ exports.run = function(config) {
 
     server.on('connection', function (socket) {
         manager.current(function (obj) {
+            if (!obj.purchaser) {
+                
+            }
             socket.emit('current', obj);
         });
     });
@@ -22,6 +24,7 @@ exports.run = function(config) {
     server.on('new', function (socket) {
         manager.newList();
         socket.broadcast.emit('new');
+        server.emit('purchaser', { purchaser: getNextPurchaser() });
     });
 
     server.on('add', function(socket, data) {

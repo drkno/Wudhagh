@@ -1,4 +1,4 @@
-﻿var Wudhagh = angular.module('Wudhagh', [
+﻿let Wudhagh = angular.module('Wudhagh', [
     'ngRoute',
     'ui.bootstrap',
     'ngTouch',
@@ -24,10 +24,10 @@ routes = [
 
 defaultRoute = 0;
 
-Wudhagh.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+Wudhagh.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) => {
 
-    var def = $routeProvider;
-    for (var i = 0; i < routes.length; i++) {
+    let def = $routeProvider;
+    for (let i = 0; i < routes.length; i++) {
         def = def.when(routes[i].path, routes[i]);
     }
     def.otherwise({
@@ -37,16 +37,16 @@ Wudhagh.config(['$routeProvider', '$locationProvider', function ($routeProvider,
 //    $locationProvider.html5Mode(true);
 }]);
 
-var wudhaghControllers = angular.module('wudhaghControllers', ['ui.bootstrap', 'ngTouch', 'chart.js', 'btford.socket-io']);
+let wudhaghControllers = angular.module('wudhaghControllers', ['ui.bootstrap', 'ngTouch', 'chart.js', 'btford.socket-io']);
 
-wudhaghControllers.factory('socket', function (socketFactory) {
-    var wudhaghIoSocket = io.connect('/', { path: '/wudhagh-ws-events' });
-    var wudhaghSocket = socketFactory({
-        ioSocket: wudhaghIoSocket
-    });
+wudhaghControllers.factory('socket', (socketFactory) => {
+    let wudhaghIoSocket = io.connect('/', { path: '/wudhagh-ws-events' }),
+        wudhaghSocket = socketFactory({
+            ioSocket: wudhaghIoSocket
+        });
     return wudhaghSocket;
 });
 
-Wudhagh.run(['$route', function($route) {
+Wudhagh.run(['$route', ($route) => {
     $route.reload();
 }]);

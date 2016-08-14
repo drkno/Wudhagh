@@ -20,8 +20,8 @@
                                     <label for="inputName" class="col-lg-2 control-label">Name</label>
                                     <div class="col-lg-10">
                                         <input class="form-control" id="inputName" placeholder="e.g. Sweet Chilli Sauce" type="text" data-ng-model="contextItem.name"
-                                                data-uib-typeahead="suggestion for suggestion in getSuggestions($viewValue)" data-typeahead-loading="loadingLocations"
-                                                data-typeahead-no-results="noResults" data-ng-keydown="$event.which === 13 && saveItem()">
+                                               data-uib-typeahead="suggestion for suggestion in getSuggestions($viewValue)" data-typeahead-loading="loadingLocations"
+                                               data-typeahead-no-results="noResults" data-ng-keydown="$event.which === 13 && saveItem()">
                                         <i data-ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                                         <div data-ng-show="noResults">
                                             <i class="glyphicon glyphicon-remove"></i> No Suggestions Found
@@ -32,24 +32,24 @@
                                     <label for="inputQuantity" class="col-lg-2 control-label">Quantity</label>
                                     <div class="col-lg-10">
                                         <table style="width:100%">
-                                        <tr>
-                                            <td>
-                                            <input class="form-control" id="inputQuantity" placeholder="e.g. 1" type="number" min="1" step="1" data-ng-model="contextItem.quantity">
-                                            </td>
-                                            <td>
-                                            <select class="form-control" data-ng-model="contextItem.unit">
-                                                <option selected="">#</option>
-                                                <option>g</option>
-                                                <option>kg</option>
-                                                <option>mL</option>
-                                                <option>L</option>
-                                                <option>Cup</option>
-                                                <option>Can</option>
-                                                <option>Bag</option>
-                                                <option>Loaf</option>
-                                            </select>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td>
+                                                    <input class="form-control" id="inputQuantity" placeholder="e.g. 1" type="number" min="1" step="1" data-ng-model="contextItem.quantity">
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" data-ng-model="contextItem.unit">
+                                                        <option selected="">#</option>
+                                                        <option>g</option>
+                                                        <option>kg</option>
+                                                        <option>mL</option>
+                                                        <option>L</option>
+                                                        <option>Cup</option>
+                                                        <option>Can</option>
+                                                        <option>Bag</option>
+                                                        <option>Loaf</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
                                         </table>
                                     </div>
                                 </div>
@@ -107,9 +107,9 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="panel panel-default" style="margin-top: 20px">
+        <div class="panel panel-default uneditable" style="margin-top: 20px">
             <div class="panel-heading" style="min-height: 40px">
-                <i class="fa fa-bar-chart-o fa-fw"></i><span class="hidden-sm hidden-xs h4" style="margin-top: 0; margin-bottom: 0"> Current List</span>
+                <span class="hidden-sm hidden-xs h4" style="margin-top: 0; margin-bottom: 0"> Current List</span>
                 <div class="pull-right">
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary btn-xs visible-lg" style="margin-right: 10px" data-ng-click="print()">
@@ -127,38 +127,39 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" style="padding: 0">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover table-striped table-nonfluid" id="itemsTable">
+                            <table class="table table-bordered table-hover table-striped table-nonfluid" id="itemsTable" style="margin-bottom: 0">
                                 <thead>
-                                <tr>
-                                    <th class="visible-lg">#</th>
-                                    <th>Item</th>
-                                    <th class="visible-lg">Added</th>
-                                    <th>Quantity</th>
-                                </tr>
+                                    <tr>
+                                        <th class="visible-lg">#</th>
+                                        <th>Item</th>
+                                        <th class="visible-lg">Added</th>
+                                        <th>Quantity</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <tr data-ng-repeat="item in items" data-ng-swipe-left="swipeLeft(item)" data-ng-swipe-right="swipeRight(item)" data-ng-class="{success:item.purchased}" class="uneditable">
-                                    <td class="visible-lg">{{$index+1}}</td>
-                                    <td style="white-space: normal">{{item.name}}</td>
-                                    <td class="visible-lg">{{dtToString(item.added)}}</td>
-                                    <td style="white-space: normal">
-                                        {{item.quantity}} {{getUnit(item)}}
-                                        <span class="pull-right">
-                                            <button class="btn btn-warning btn-xs print-remove" data-toggle="modal" data-target="#editModal" data-ng-click="setContext(item)">
-                                                <i class="glyphicon glyphicon-edit"></i>
-                                                <span class="hidden-sm hidden-xs">Edit Item</span>
-                                            </button>
-                                            <button class="btn btn-danger btn-xs print-remove" data-toggle="modal" data-target="#deleteModal" data-ng-click="setContext(item)">
-                                                <i class="glyphicon glyphicon-trash"></i>
-                                                <span class="hidden-sm hidden-xs">Delete Item</span>
-                                            </button>
-                                        </span>
-                                    </td>
-                                </tr>
+                                    <tr data-ng-repeat="item in items" data-ng-swipe-left="swipeLeft(item)" data-ng-swipe-right="swipeRight(item)" data-ng-class="{success:item.purchased}"
+                                        style="cursor: pointer">
+                                        <td class="visible-lg">{{$index+1}}</td>
+                                        <td style="white-space: normal">{{item.name}}</td>
+                                        <td class="visible-lg">{{dtToString(item.added)}}</td>
+                                        <td style="white-space: normal">
+                                            {{item.quantity}} {{getUnit(item)}}
+                                            <span class="pull-right">
+                                                <button class="btn btn-warning btn-xs print-remove" data-toggle="modal" data-target="#editModal" data-ng-click="setContext(item)">
+                                                    <i class="glyphicon glyphicon-edit"></i>
+                                                    <span class="hidden-sm hidden-xs">Edit Item</span>
+                                                </button>
+                                                <button class="btn btn-danger btn-xs print-remove" data-toggle="modal" data-target="#deleteModal" data-ng-click="setContext(item)">
+                                                    <i class="glyphicon glyphicon-trash"></i>
+                                                    <span class="hidden-sm hidden-xs">Delete Item</span>
+                                                </button>
+                                            </span>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -169,7 +170,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row uneditable">
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
