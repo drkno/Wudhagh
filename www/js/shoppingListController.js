@@ -12,6 +12,7 @@
         $scope.setContext = (item) => {
             currName = item.name;
             $scope.contextItem = angular.copy(item);
+            $scope.contextItem.insert = false;
         };
         
         let resetSelectionContext = () => {
@@ -47,13 +48,14 @@
 
         //#endregion data context
 
-        //#region current
+        //#region current context
 
         socket.on('current', (data) => {
             $scope.items = data.items;
             resetSelectionContext();
             setOrder();
         });
+        socket.emit('refresh');
 
         //#endregion
 
@@ -88,6 +90,7 @@
         });
 
         let performAdd = (item) => {
+            delete item.insert;
             addItem(item);
             socket.emit('add', item);
             resetSelectionContext();
@@ -140,6 +143,7 @@
         });
 
         let performUpdate = (oldName, item) => {
+            delete item.insert;
             updateItem(oldName, item);
             socket.emit('update', { oldName: oldName, item: item });
             resetSelectionContext();
@@ -268,13 +272,6 @@
             popupWin.document.close();
         };
 
-        $scope.getPurchaserString = () => {
-            if (!purchaser) {
-                return 'Loading...';
-            }
-            return purchaser.charAt(0).toUpperCase() + purchaser.substr(1).toLowerCase() + '\'s Purchase';
-        };
-
         $scope.saveItem = () => {
             if (!$scope.contextItem.name || $scope.contextItem.name.trim().length === 0 || !$scope.contextItem.quantity) {
                 alert('Invalid input.');
@@ -292,7 +289,12 @@
 
             if (filtered.length > 0) {
                 let cpy = angular.copy(filtered[0]);
-                cpy.quantity += $scope.contextItem.quantity;
+                if ($scope.contextItem.insert) {
+                    cpy.quantity += $scope.contextItem.quantity;
+                }
+                else {
+                    cpy.quantity = $scope.contextItem.quantity;
+                }
                 $scope.contextItem = cpy;
                 currName = cpy.name;
             }
@@ -310,6 +312,4 @@
             resetSelectionContext();
         };
 
-
-        //#endregion
     }]);

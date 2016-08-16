@@ -8,6 +8,7 @@ let express = require('express'),
     directory = require('./directory.js');
 
 module.exports = class {
+
     constructor (port, htmlRoot, eventsRoot, userManager, ignoredAuthConfig) {
         if (!htmlRoot) {
             htmlRoot = {
@@ -30,7 +31,7 @@ module.exports = class {
             });
         
             let eventsContainer = this.eventsContainer = {};
-            this.io.on('connection', function (socket) {
+            this.io.on('connection', (socket) => {
                 if (eventsContainer['connection']) {
                     for (let i = 0; i < eventsContainer['connection'].length; i++) {
                         eventsContainer['connection'][i](socket);
@@ -52,6 +53,10 @@ module.exports = class {
 
                     socket.on(event, eventHandler(socket));
                 }
+
+                socket.on('disconnect', () => {
+                    socket.removeAllListeners();
+                });
             });
         }
 
