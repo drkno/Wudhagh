@@ -68,6 +68,7 @@ module.exports = class {
     }
 
     removeItem (item) {
+        delete item.insert;
         let id = this.currId;
         this.store.update({ _id: id }, { $pull: { items: item } }, {}, (err) => {
             if (err) {
